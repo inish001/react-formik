@@ -30,6 +30,7 @@ const validationSchema = Yup.object().shape({
     twitter: Yup.string().required("Required!"),
   }),
   phoneNumbers: Yup.array().of(Yup.string().required("Required!")),
+  phNumbers: Yup.array().of(Yup.string().required("Required!"))
 });
 const ManualTrig = () => {
   return (
@@ -153,6 +154,7 @@ const ManualTrig = () => {
                   }}
                 </FieldArray>
               </label>
+              <ErrorMessage name="phNumbers" component={TextError}/>
             </div>
             <button type="button" onClick={()=>formik.validateField("address")}>Validate Address</button>
             <button type="button" onClick={()=>formik.setFieldTouched("address")}>Visit Address</button>

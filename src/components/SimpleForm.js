@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import TextError from "./TextError";
+// import axios from "axios";
 
 const initialValues = {
   name: "",
@@ -16,8 +17,22 @@ const initialValues = {
   phoneNumbers: ["", ""],
   phNumbers: [""],
 };
-const onSubmit = (values) => {
+const savedValues = {
+  name: "Nishant",
+  email: "nishantfulara@gmail.com",
+  channel: "FitMinds",
+  address: "221 Baker Street",
+  social: {
+    facebook: "nishant",
+    instagram: "@i_nish001",
+    twitter: "nishantfulara",
+  },
+  phoneNumbers: ["8368552230", "9899844174"],
+  phNumbers: ["8368552230"],
+};
+const onSubmit = (values, onSubmitProps) => {
   console.log("Data", values);
+  onSubmitProps.resetForm();
 };
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Required!"),
@@ -30,13 +45,16 @@ const validationSchema = Yup.object().shape({
     twitter: Yup.string().required("Required!"),
   }),
   phoneNumbers: Yup.array().of(Yup.string().required("Required!")),
+  phNumbers: Yup.array().of(Yup.string().required("Required!")),
 });
 const SimpleForm = () => {
+  const [formValues, setFormValues] = useState(null);
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={formValues || initialValues}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
+      enableReinitialize
     >
       <Form>
         <div className="form-control">
@@ -150,7 +168,18 @@ const SimpleForm = () => {
               }}
             </FieldArray>
           </label>
+          <ErrorMessage name="phNumbers" component={TextError} />
         </div>
+        <button
+          type="button"
+          className="btn btn-success"
+          onClick={() => setFormValues(savedValues)}
+        >
+          Load Saved Data
+        </button>
+        <button type="reset" className="btn btn-danger">
+          Reset
+        </button>
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
